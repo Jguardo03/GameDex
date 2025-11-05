@@ -1,4 +1,5 @@
 
+
 a{
     text-decoration: none;
     color: black;
@@ -8,7 +9,9 @@ a{
     font-weight: 600 ;
 }
 
-
+main{
+    padding: 20px 40px;
+}
 p{
     text-align: justify;
     font-family: sans-serif;
@@ -103,4 +106,86 @@ textarea{
     flex-direction: row;
     align-items: center;
     gap: 8px;
+}
+
+.filter-box{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 5px 15px;
+}
+
+.filter-box-elements{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.element-dropdown{
+    display: flex;
+    flex-direction: column;
+}
+
+.card-grid-game{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap:2rem;
+    padding-top:10px;
+}
+
+.game-card{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.game-card img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.game-card-content{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px
+}
+
+.game-card-elements{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin: 2px;
+}
+        
+.badge-genre {
+    background: #dbeafe;
+    color: #1e40af;
+}
+        
+.badge-platform {
+    background: #fce7f3;
+    color: #9f1239;
+}
+        
+.rating {
+    color: #f59e0b;
+    font-weight: bold;
+    font-size: 15px;
 }
