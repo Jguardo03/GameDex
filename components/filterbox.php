@@ -6,8 +6,8 @@
 
 <div class="filter-box">
     <div class="icon">
-        <i class="fa-solid fa-filter"></i>
-        <p>Filters</p>
+        <i class="fa-solid fa-filter fa-xl"></i>
+        <h3>Filters</h3>
     </div>
     <div class="filter-box-elements">
         <div class="element-dropdown">
@@ -16,7 +16,7 @@
             require_once __DIR__ . '/../models/genre.php';
             $genreModel = new Genre();
             $genres = $genreModel->getAllWithCount();
-            echo '<select name="genre" id="genre-dropdown">';
+            echo '<select class="select-dropdown"name="genre" id="genre-dropdown">';
             echo '<option value="">All</option>';
             foreach ($genres as $genre) {
                 echo '<option value="' . htmlspecialchars($genre['id']) . '">' . htmlspecialchars($genre['name']) . ' (' . htmlspecialchars($genre['game_count']) . ')</option>';
@@ -30,7 +30,7 @@
             require_once __DIR__ . '/../models/platform.php';
             $platformModel = new Platform();
             $platforms = $platformModel->getAllWithCount();
-            echo '<select name="platform" id="platform-dropdown">';
+            echo '<select name="platform" id="platform-dropdown" class="select-dropdown">';
             echo '<option value="">All</option>';
             foreach ($platforms as $platform) {
                 echo '<option value="' . htmlspecialchars($platform['id']) . '">' . htmlspecialchars($platform['name']) . ' (' . htmlspecialchars($platform['game_count']) . ')</option>';

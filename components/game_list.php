@@ -32,7 +32,10 @@ if (empty($games)) {
     echo '<div class="card-grid-game">';
     foreach($games as $game){
         echo '<div class="game-card">';
+        echo '<div class="game-card-image">';
+        echo '<i class="fa-regular fa-heart fa-2xl icon-heart"></i>';
         echo '<img src="./assests/GameDex_logo.png" alt="Game Image">';
+        echo '</div>';
         echo '<div class="game-card-content">';
         echo '<h3>' . htmlspecialchars($game['title']) . '</h3>';
         echo '<div class="game-card-elements">';
