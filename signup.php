@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if($error) echo "<p class='error-message'>$error</p>"; ?>
 
                 <div class="login-form-group mb-4">
-                    <input type="text" class="login-form-control" name="username" placeholder="Username" required>
+                    <input type="text" class="login-form-control" name=" " placeholder="Username" required>
                 </div>
 
                 <div class="login-form-group mb-4">

@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form class="login-form" method="POST">
                 <h2 class="login-form-title">Login</h2>
 
-                <?php 
+                <?php
                 if ($success) echo "<p class='success-message'>$success</p>";
                 if ($error) echo "<p class='error-message'>$error</p>"; 
                 ?>

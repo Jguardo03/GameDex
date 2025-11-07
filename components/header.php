@@ -1,13 +1,13 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Reusable header component
 // Default values (if not set by the including page)
 $siteTitle = isset($siteTitle) ? $siteTitle : 'GameDex';
 $activePage = isset($activePage) ? $activePage : '';
 
 // Start session om den inte redan är startad
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 // Bestäm Account-länk
 $accountLink = isset($_SESSION['user_id']) ? 'account.php' : 'login.php';
@@ -26,7 +26,7 @@ $accountLink = isset($_SESSION['user_id']) ? 'account.php' : 'login.php';
                 </div>
                 <div class="icon">
                     <i class="fa-regular fa-heart"></i>
-                    <li class="<?= ($activePage === 'Whishlist') ? 'active' : '' ?>"><a href="">Whishlist</a></li>
+                    <li class="<?= ($activePage === 'Whishlist') ? 'active' : '' ?>"><a href="">Wishlist</a></li>
                 </div>
                 <div class="icon">
                     <i class="fa-regular fa-user"></i>

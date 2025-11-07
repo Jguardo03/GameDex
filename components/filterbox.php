@@ -50,7 +50,7 @@
             console.log('Selected Platform: ' + selectedPlatform);
             // AJAX call to refresh the game list
             $.ajax({
-                url: 'index.php', // Corrected URL
+                url: 'components/game_list.php', // Corrected URL
                 type: 'GET', // Changed to GET for simplicity and bookmarking
                 data:{
                     genre: selectedGenre,
@@ -60,6 +60,7 @@
                 success:function(response){
                     // Replace the content of the game-catalog-container with the response
                     $('#game-catalog-container').html(response);
+                    attachedHearthClick();
                 },
                 error:function(xhr,status,error){
                     console.error("AJAX Error: " + status + " - " + error);
