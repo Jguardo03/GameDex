@@ -1,13 +1,16 @@
 <?php
 // Reusable header component
-// Usage (in any page):
-// $siteTitle = 'GameDex'; // optional
-// $activePage = 'home'; // optional: 'home', 'games', 'about', etc.
-// include __DIR__ . '/header.php';
-
 // Default values (if not set by the including page)
 $siteTitle = isset($siteTitle) ? $siteTitle : 'GameDex';
 $activePage = isset($activePage) ? $activePage : '';
+
+// Start session om den inte redan är startad
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Bestäm Account-länk
+$accountLink = isset($_SESSION['user_id']) ? 'account.php' : 'login.php';
 ?>
 
 <header class="site-header">
@@ -15,7 +18,7 @@ $activePage = isset($activePage) ? $activePage : '';
         <div class="brand">
             <img src="./assests/GameDex_logo.png" alt="GameDex Logo" class="logo">
         </div>
-        <nav class="main-nav" >
+        <nav class="main-nav">
             <ul>
                 <div class="icon">
                     <i class="fa-regular fa-house"></i>
@@ -25,9 +28,9 @@ $activePage = isset($activePage) ? $activePage : '';
                     <i class="fa-regular fa-heart"></i>
                     <li class="<?= ($activePage === 'Whishlist') ? 'active' : '' ?>"><a href="">Whishlist</a></li>
                 </div>
-                <div  class="icon">
+                <div class="icon">
                     <i class="fa-regular fa-user"></i>
-                    <li class="<?= ($activePage === 'Account') ? 'active' : '' ?>"><a href="account.php">Account</a></li>
+                    <li class="<?= ($activePage === 'Account') ? 'active' : '' ?>"><a href="<?= $accountLink ?>">Account</a></li>
                 </div>
             </ul>
         </nav>
