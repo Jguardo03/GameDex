@@ -10,7 +10,11 @@ $pdo = DataBase::getInstance()->getConnection();
 // Receive filter parameters from GET request
 $selectedGenre = $_GET['genre'] ?? '';
 $selectedPlatform = $_GET['platform'] ?? '';
-$userId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id']?? null;
+//Verify user is sign In
+if(!isset($userId)){
+    $userStatus = "Logout";
+}
 
 
 $gameModel = new Game();
@@ -73,8 +77,15 @@ if (empty($games)) {
 
 <script>
     function attachHearthClick(){
+        
         const heartIcon = $('.icon-heart');
         heartIcon.off('click').on('click', function() {
+            let userStatus = <?php echo json_encode('$userStatus');?>;
+            if(userStatus=="Logout"){
+            console.log("Login to add games to your wishlist") 
+            alert("Login to add games to your wishlist");
+            return;
+            }
             const gameId = $(this).data('game-id');
             const icon =$(this);
             console.log(gameId);
