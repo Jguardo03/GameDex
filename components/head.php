@@ -11,9 +11,11 @@ $siteTitle = $siteTitle ?? 'GameDex';
 
 <!-- Styles -->
 <link rel="stylesheet" href="styles/styles.css?v=<?= filemtime('styles/styles.css') ?>">
+<link rel="stylesheet" href="styles/responsive.css?v=<?= filemtime('styles/styles.css') ?>">
 
 <!-- Font Awesome Icons -->
 <script src="https://kit.fontawesome.com/cffa9d18cb.js" crossorigin="anonymous"></script>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
