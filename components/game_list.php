@@ -55,7 +55,7 @@ if (empty($games)) {
         }
         echo '<img src="./assests/GameDex_logo.png" alt="Game Image">';
         echo '</div>';
-        echo '<div class="game-card-content">';
+        echo '<div class="game-card-content" data-game-id='. $game["id"].'>';
         echo '<h3>' . htmlspecialchars($game['title']) . '</h3>';
         echo '<div class="game-card-elements">';
         foreach($game['platforms'] as $platform){
@@ -101,8 +101,16 @@ if (empty($games)) {
         });
     }
 
+    function onGameClick(){
+        $('.game-card-content').off('click').on('click', function() {
+            const gameId = $(this).data('game-id');
+            window.location.href = 'gameDetails.php?game_id=' + gameId;
+        });
+    }
+
     $(document).ready(function() {
         attachHearthClick();
+        onGameClick();
     });
 </script>
         

@@ -6,7 +6,7 @@
         include_once __DIR__ . '/components/game_list.php';
         exit; // Stop further execution for AJAX requests
     }
-?><!DOCTYPE html>
+?>
 <html lang="en">
 <head>
     <?php include_once __DIR__ . '/components/head.php'; ?>

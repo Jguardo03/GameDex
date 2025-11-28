@@ -6,7 +6,7 @@
 class DataBase{
 
     private $host = "localhost";
-    private $dbName = "game_catalog";
+    private $dbName = "gamDex";
     private $username = "root";
     private $password = "";
     private $charset = "utf8mb4";
