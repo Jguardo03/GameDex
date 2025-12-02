@@ -9,6 +9,17 @@ require_once __DIR__ . '/config/database.php';
 $pdo = DataBase::getInstance()->getConnection();
 $error = '';
 
+// email validation
+function isValidEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+// password min char req
+function isStrongPassword($password) {
+    return strlen(trim($password)) >= 6;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
@@ -16,39 +27,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $preferred_currency = $_POST['preferred_currency'] ?? 'AUD';
     $platforms = $_POST['platforms'] ?? [];
 
-    // Check if username or email already exists
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-    $stmt->execute([$username, $email]);
-    if ($stmt->fetch()) {
-        $error = "Username or email already taken!";
-    } else {
-        // Hash password
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    // Reset error
+    $error = '';
 
-        // Insert new user
-        $stmt = $pdo->prepare("INSERT INTO users (username, email, password_hash, preferred_currency) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$username, $email, $password_hash, $preferred_currency]);
-        $user_id = $pdo->lastInsertId();
+    // validate fields
+    if (empty($username) || empty($email) || empty($password)) {
+        $error = "All fields are required!"; // no blank txt fields
+    } elseif (!isValidEmail($email)) {
+        $error = "Invalid email format!";
+    }
 
-        // Optional: insert platforms if selected
-        if ($platforms) {
-            $stmtPlatform = $pdo->prepare("SELECT id FROM platforms WHERE name = ?");
-            $stmtInsertPlatform = $pdo->prepare("INSERT INTO user_platforms (user_id, platform_id) VALUES (?, ?)");
-            foreach ($platforms as $pname) {
-                $stmtPlatform->execute([$pname]);
-                $row = $stmtPlatform->fetch(PDO::FETCH_ASSOC);
-                if ($row) {
-                    $stmtInsertPlatform->execute([$user_id, $row['id']]);
+    // create user if no error
+    if ($error === '') {
+        try {
+            // Check if username or email already exists
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+            $stmt->execute([$username, $email]);
+            if ($stmt->fetch()) {
+                $error = "Username or email already taken!";
+            } else {
+                // Hash password
+                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+                // Insert new user
+                $stmt = $pdo->prepare("INSERT INTO users (username, email, password_hash, preferred_currency) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$username, $email, $password_hash, $preferred_currency]);
+                $user_id = $pdo->lastInsertId();
+
+                // Optional: insert platforms if selected
+                if ($platforms) {
+                    $stmtPlatform = $pdo->prepare("SELECT id FROM platforms WHERE name = ?");
+                    $stmtInsertPlatform = $pdo->prepare("INSERT INTO user_platforms (user_id, platform_id) VALUES (?, ?)");
+                    foreach ($platforms as $pname) {
+                        $stmtPlatform->execute([$pname]);
+                        $row = $stmtPlatform->fetch(PDO::FETCH_ASSOC);
+                        if ($row) {
+                            $stmtInsertPlatform->execute([$user_id, $row['id']]);
+                        }
+                    }
                 }
-            }
-        }
 
-        // Set success message and redirect to login
-        $_SESSION['success_message'] = "Account successfully created!";
-        header('Location: login.php');
-        exit;
+                // Set success message and redirect to login
+                $_SESSION['success_message'] = "Account successfully created!"; // → meddelande till användare
+                header('Location: login.php');
+                exit;
+            }
+        } catch (PDOException $e) {
+            error_log("Database error during signup: " . $e->getMessage());
+            $error = "Something went wrong. Please try again later."; 
+        }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if($error) echo "<p class='error-message'>$error</p>"; ?>
 
                 <div class="login-form-group mb-4">
-                    <input type="text" class="login-form-control" name=" " placeholder="Username" required>
+                    <input type="text" class="login-form-control" name="username" placeholder="Username" required>
                 </div>
 
                 <div class="login-form-group mb-4">

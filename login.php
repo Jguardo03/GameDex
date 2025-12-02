@@ -16,20 +16,25 @@ if (isset($_SESSION['success_message'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
+     $username = trim($_POST['username']); // remove white space 
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
+    try { // catch db connection errors 
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['username'];
-        header('Location: index.php');
-        exit;
-    } else {
-        $error = "Incorrect username or password!";
+        if ($user && password_verify($password, $user['password_hash'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['username'];
+            header('Location: index.php');
+            exit;
+        } else {
+            $error = "Incorrect username or password!"; // inform user 
+        }
+    } catch (PDOException $e) { // get db error 
+        error_log("Database error during login: " . $e->getMessage()); // reg error
+        $error = "Something went wrong. Please try again later."; // --> inform user 
     }
 }
 ?>
