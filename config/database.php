@@ -11,6 +11,12 @@ class DataBase{
     private $password = "";
     private $charset = "utf8mb4";
 
+    // private $host = "sql109.infinityfree.com";
+    // private $dbName = "if0_40542020_gamedex";
+    // private $username = "if0_40542020";
+    // private $password = "MuGfgPqELwl";
+    // private $charset = "utf8mb4";
+
     private $pdo;
     private $error;
 

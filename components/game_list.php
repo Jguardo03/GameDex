@@ -49,11 +49,12 @@ if (empty($games)) {
         echo '<div class="game-card">';
         echo '<div class="game-card-image">';
         if($stmt->fetch()){
-            echo '<i class="fa-solid fa-heart-circle-minus fa-2xl icon-heart" data-game-id='. $game["id"].'></i>';
+            echo '<i class="fa-solid fa-heart-circle-minus fa-2xl icon-heart" style="color: red;"  data-game-id='. $game["id"].';></i>';
         }else{
-            echo '<i class="fa-regular fa-heart fa-2xl icon-heart"  data-game-id='. $game["id"].';></i>';
+            echo '<i class="fa-regular fa-heart fa-2xl icon-heart" style="color: red;"  data-game-id='. $game["id"].';></i>';
         }
-        echo '<img src="./assests/GameDex_logo.png" alt="Game Image">';
+        $image = $game['image'];
+        echo '<img src='. htmlspecialchars($image).' alt=' . htmlspecialchars($game['title']).' />';
         echo '</div>';
         echo '<div class="game-card-content" data-game-id='. $game["id"].'>';
         echo '<h3>' . htmlspecialchars($game['title']) . '</h3>';

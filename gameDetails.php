@@ -36,9 +36,10 @@ if (!isset($game_id)) {
     echo '</div>';
     echo '<section class="card">';
     echo '<section class="game-image">';
-    echo '<img src="./assests/GameDex_logo.png" alt="Game Image">';
+    $image = $game['image'];
+    echo '<img src='.htmlspecialchars($image).' alt="Game Image">';
     echo '<div class="game-header-details">';
-    echo '<h1>' . htmlspecialchars($game['title']) . '</h1>';
+    echo '<h1 style="color: white">' . htmlspecialchars($game['title']) . '</h1>';
     echo '<div class="game-header-elements">';
     echo '<spam class ="badge rating">' .htmlspecialchars($game['avg_rating'],2) . '⭐</span>';
     foreach($game['genres'] as $genre){

@@ -16,6 +16,7 @@ class Game {
     private $table_game_platforms = 'game_platforms';
     private $table_game_ratings = 'game_ratings';
     private $table_reviews = 'reviews';
+    private $table_game_images = 'game_images';
     
     // Game properties
     public $id;
@@ -172,6 +173,9 @@ class Game {
                 
                 // Get platforms
                 $game['platforms'] = $this->getGamePlatforms($game['id']);
+
+                // Get Images
+                $game['image'] = $this->getGameImages($game['id']);
                 
                 $enrichedGames[] = $game;
             }
@@ -251,6 +255,7 @@ class Game {
                 $game['genres'] = $this->getGameGenres($game['id']);
                 $game['platforms'] = $this->getGamePlatforms($game['id']);
                 $game['reviews'] = $this->getGameReviews($game['id']);
+                $game['image'] = $this->getGameImages($game['id']);
                 
                 return $game;
             }
@@ -321,6 +326,31 @@ class Game {
         } catch (PDOException $e) {
             error_log("Error fetching game genres: " . $e->getMessage());
             return [];
+        }
+    }
+
+    /**
+     * Get all images for a specific game
+     */
+
+    private function getGameImages($game_id) {
+        try {
+            $query = "SELECT
+                        gi.url
+                    FROM {$this->table_game_images} gi
+                    WHERE gi.game_id = :game_id
+                    LIMIT 1";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':game_id', $game_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['url'] ;
+            
+        } catch (PDOException $e) {
+            error_log("Error fetching game images: " . $e->getMessage());
+            return "error";
         }
     }
     
