@@ -11,17 +11,64 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Fetch user info
+$userId = $_SESSION['user_id'];
+
+// Hantera uppdatering om formuläret skickas
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $currentPassword = $_POST['current_password'] ?? '';
+    $newUsername = trim($_POST['username'] ?? '');
+    $newEmail = trim($_POST['email'] ?? '');
+    $newPassword = $_POST['password'] ?? '';
+
+    // Hämta användarens aktuella lösenord hash
+    $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch();
+
+    if (!$user || !password_verify($currentPassword, $user['password_hash'])) {
+        $_SESSION['error_message'] = "Current password is incorrect.";
+        header('Location: account.php');
+        exit;
+    }
+
+    // Uppdatera username, email och password om nytt lösenord angavs
+    if ($newPassword) {
+        $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("UPDATE users SET username = ?, email = ?, password_hash = ? WHERE id = ?");
+        $stmt->execute([$newUsername, $newEmail, $newPasswordHash, $userId]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE users SET username = ?, email = ? WHERE id = ?");
+        $stmt->execute([$newUsername, $newEmail, $userId]);
+    }
+
+    // Uppdatera plattformar om något valts
+    if (isset($_POST['platforms'])) {
+        $stmtDelete = $pdo->prepare("DELETE FROM user_platforms WHERE user_id = ?");
+        $stmtDelete->execute([$userId]);
+
+        $stmtInsert = $pdo->prepare("INSERT INTO user_platforms (user_id, platform_id) VALUES (?, ?)");
+        foreach ($_POST['platforms'] as $platformId) {
+            $stmtInsert->execute([$userId, $platformId]);
+        }
+    }
+
+    $_SESSION['success_message'] = "Your account has been updated successfully.";
+    header('Location: account.php');
+    exit;
+}
+
+// Hämta användarinformation
 $stmt = $pdo->prepare("SELECT username, email, preferred_currency FROM users WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
+$stmt->execute([$userId]);
 $user = $stmt->fetch();
 
-// Fetch user platforms
+// Hämta alla plattformar
 $stmtPlatforms = $pdo->query("SELECT id, name FROM platforms ORDER BY name");
 $allPlatforms = $stmtPlatforms->fetchAll(PDO::FETCH_ASSOC);
 
+// Hämta användarens plattformar
 $stmtUserPlatforms = $pdo->prepare("SELECT platform_id FROM user_platforms WHERE user_id = ?");
-$stmtUserPlatforms->execute([$_SESSION['user_id']]);
+$stmtUserPlatforms->execute([$userId]);
 $userPlatforms = $stmtUserPlatforms->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
@@ -37,8 +84,20 @@ $userPlatforms = $stmtUserPlatforms->fetchAll(PDO::FETCH_COLUMN);
 
     <main>
         <div class="login-page-container">
-            <form class="login-form" action="update_account.php" method="POST">
+            <form class="login-form" method="POST">
                 <h2 class="login-form-title">Your Account</h2>
+
+                <!-- Success/Error messages -->
+                <?php
+                if (isset($_SESSION['success_message'])) {
+                    echo "<p class='success-message'>{$_SESSION['success_message']}</p>";
+                    unset($_SESSION['success_message']);
+                }
+                if (isset($_SESSION['error_message'])) {
+                    echo "<p class='error-message'>{$_SESSION['error_message']}</p>";
+                    unset($_SESSION['error_message']);
+                }
+                ?>
 
                 <!-- Username -->
                 <div class="login-form-group mb-4">
@@ -58,6 +117,15 @@ $userPlatforms = $stmtUserPlatforms->fetchAll(PDO::FETCH_COLUMN);
                            name="email" 
                            value="<?= htmlspecialchars($user['email']) ?>" 
                            placeholder="Enter your email">
+                </div>
+
+                <!-- Current Password -->
+                <div class="login-form-group mb-4">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" class="login-form-control" 
+                           id="current_password"
+                           name="current_password" 
+                           placeholder="Enter current password" required>
                 </div>
 
                 <!-- New password -->
@@ -92,7 +160,7 @@ $userPlatforms = $stmtUserPlatforms->fetchAll(PDO::FETCH_COLUMN);
                     <div>
                         <?php foreach ($allPlatforms as $platform): ?>
                             <label>
-                                <input type="checkbox" name="platforms[]" value="<?= $platform['name'] ?>"
+                                <input type="checkbox" name="platforms[]" value="<?= $platform['id'] ?>"
                                     <?= in_array($platform['id'], $userPlatforms) ? 'checked' : '' ?>>
                                 <?= $platform['name'] ?>
                             </label><br>
@@ -110,8 +178,6 @@ $userPlatforms = $stmtUserPlatforms->fetchAll(PDO::FETCH_COLUMN);
                 <div class="text-center mb-3">
                     <a href="logout.php" class="logout-link">Log out</a>
                 </div>
-
-
             </form>
         </div>
     </main>
