@@ -1,11 +1,11 @@
-/* Container */
+/* Login Page */
 .login-page-container {
     max-width: 480px;
     margin: 0 auto;
     padding-top: 2rem;
 }
 
-/* Form styling */
+/* Login Form*/
 .login-form {
     background: white;
     padding: 2rem;

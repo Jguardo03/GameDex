@@ -12,35 +12,35 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch user info
-$stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT username, email, preferred_currency FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch();
+
+// Fetch user platforms
+$stmtPlatforms = $pdo->query("SELECT id, name FROM platforms ORDER BY name");
+$allPlatforms = $stmtPlatforms->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtUserPlatforms = $pdo->prepare("SELECT platform_id FROM user_platforms WHERE user_id = ?");
+$stmtUserPlatforms->execute([$_SESSION['user_id']]);
+$userPlatforms = $stmtUserPlatforms->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include __DIR__ . '/components/head.php'; ?>
-    <link rel="stylesheet" href="styles/account_styles.css?v=<?= filemtime('styles/login_styles.css') ?>">
+    <link rel="stylesheet" href="styles/account_styles.css?v=<?= filemtime('styles/account_styles.css') ?>">
     <title>GameDex - Account</title>
-    <style>
-        /* Optional quick styling for labels */
-        .login-form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
     <?php include __DIR__ . '/components/header.php'; ?>
 
     <main>
         <div class="login-page-container">
-            <form class="login-form">
+            <form class="login-form" action="update_account.php" method="POST">
                 <h2 class="login-form-title">Your Account</h2>
 
-                <!-- Username (editable) -->
+                <!-- Username -->
                 <div class="login-form-group mb-4">
                     <label for="username">Username</label>
                     <input type="text" class="login-form-control" 
@@ -50,7 +50,7 @@ $user = $stmt->fetch();
                            placeholder="Enter your username">
                 </div>
 
-                <!-- Email (editable) -->
+                <!-- Email -->
                 <div class="login-form-group mb-4">
                     <label for="email">Email</label>
                     <input type="email" class="login-form-control" 
@@ -60,10 +60,58 @@ $user = $stmt->fetch();
                            placeholder="Enter your email">
                 </div>
 
-                <!-- Logout button -->
+                <!-- New password -->
+                <div class="login-form-group mb-4">
+                    <label for="password">New Password</label>
+                    <input type="password" class="login-form-control" 
+                           id="password"
+                           name="password" 
+                           placeholder="Enter new password">
+                </div>
+
+                <!-- Repeat new password -->
+                <div class="login-form-group mb-4">
+                    <label for="password_repeat">Repeat New Password</label>
+                    <input type="password" class="login-form-control" 
+                           id="password_repeat"
+                           name="password_repeat" 
+                           placeholder="Repeat new password">
+                </div>
+
+                <!-- Preferred currency AUD only -->
+                <div class="login-form-group mb-4">
+                    <label for="preferred_currency">Preferred Currency</label>
+                    <select class="login-form-control" name="preferred_currency" id="preferred_currency">
+                        <option value="AUD" selected>AUD</option>
+                    </select>
+                </div>
+
+                <!-- Platforms checkboxes -->
+                <div class="login-form-group mb-4">
+                    <label>Owned consoles and platforms:</label>
+                    <div>
+                        <?php foreach ($allPlatforms as $platform): ?>
+                            <label>
+                                <input type="checkbox" name="platforms[]" value="<?= $platform['name'] ?>"
+                                    <?= in_array($platform['id'], $userPlatforms) ? 'checked' : '' ?>>
+                                <?= $platform['name'] ?>
+                            </label><br>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Save Changes + Delete Account -->
+                <div class="button-row text-center mb-3">
+                    <button type="submit" class="login-btn-primary">Save Changes</button>
+                    <a href="delete_account.php" class="logout-link">Delete Account</a>
+                </div>
+
+                <!-- Logout -->
                 <div class="text-center mb-3">
                     <a href="logout.php" class="logout-link">Log out</a>
                 </div>
+
+
             </form>
         </div>
     </main>

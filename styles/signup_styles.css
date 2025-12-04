@@ -1,30 +1,30 @@
-/* Login Page Container */
+/* Signup Page */
 .login-page-container {
     max-width: 480px;
-    margin: 0 auto; /* centrerar */
-    padding-top: 2rem; /* matchar index-top padding */
+    margin: 0 auto;
+    padding-top: 2rem;
 }
 
-/* Minimal Login Form */
+/* Signup Form */
 .login-form {
     background: white;
-    padding: 2rem; /* matchar card-padding */
-    border-radius: 8px; /* matchar game-card */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* matchar game-card */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* Inputs */
+/* Input fields */
 .login-form-control {
-    border-radius: 0.3rem; /* matchar index input */
+    border-radius: 0.3rem;
     padding: 0.75rem;
-    border: 2px solid #d1d5db; /* matchar index input */
+    border: 2px solid #d1d5db;
     font-size: 0.9rem;
     width: 100%;
     max-width: 390px;
-    font-family: sans-serif; /* matchar index */
+    font-family: sans-serif;
 }
 
 .login-form-control:focus {
@@ -32,7 +32,7 @@
     box-shadow: 0 0 0 2px #228be6;
 }
 
-/* Button */
+/* Primary button styling */
 .login-btn-primary {
     background-color: #228be6;
     border: none;
@@ -49,13 +49,13 @@
 
 /* Form title */
 .login-form-title {
-    font-size: 2.25rem; /* matchar h2 i index */
+    font-size: 2.25rem;
     font-weight: 700;
     text-align: center;
     margin-bottom: 1rem;
 }
 
-/* Forgot password link */
+/* Links */
 .login-link {
     color: #228be6;
     font-size: 0.9rem;

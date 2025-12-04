@@ -1,69 +1,69 @@
-/* Container for Login / Account Page */
+/* Account Page */
 .login-page-container {
     max-width: 480px;
-    margin: 0 auto; /* center the container */
-    padding-top: 2rem; /* top padding to match main layout */
+    margin: 0 auto;
+    padding-top: 2rem;
 }
 
-/* Minimal Login / Account Form */
+/* Account Form */
 .login-form {
-    background: white; /* form background */
-    padding: 2rem; /* inner padding */
-    border-radius: 8px; /* rounded corners */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* subtle shadow */
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
-    gap: 10px; /* vertical spacing between children */
+    gap: 10px;
 }
 
 /* Input fields */
 .login-form-control {
-    border-radius: 0.3rem; /* rounded edges */
-    padding: 0.75rem; /* inner padding */
-    border: 2px solid #d1d5db; /* light gray border */
+    border-radius: 0.3rem;
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
     font-size: 0.9rem;
     width: 100%;
-    max-width: 390px; /* limit input width */
+    max-width: 390px;
     font-family: sans-serif;
-    color: #111; /* text color when typing */
+    color: #111;
 }
 
 /* Input focus state */
 .login-form-control:focus {
-    background: #fff; /* white background on focus */
-    box-shadow: 0 0 0 2px #228be6; /* blue focus ring */
-    outline: none; /* remove default outline */
+    background: #fff;
+    box-shadow: 0 0 0 2px #228be6;
+    outline: none;
 }
 
 /* Labels for inputs */
 .login-form-group label {
     display: block;
-    margin-bottom: 5px; /* space below label */
+    margin-bottom: 0px;
     font-weight: bold;
     font-family: sans-serif;
-    color: #4b5563; /* gray label text */
+    color: #4b5563;
     font-size: 0.95rem;
 }
 
 /* Primary button styling */
 .login-btn-primary {
-    background-color: #228be6; /* blue background */
+    background-color: #228be6;
     border: none;
     padding: 0.75rem 0;
     border-radius: 0.3rem;
-    color: white; /* white text */
+    color: white;
     font-weight: 600;
     cursor: pointer;
 }
 
 /* Hover state for primary button */
 .login-btn-primary:hover {
-    background-color: #1c7ed6; /* darker blue on hover */
+    background-color: #1c7ed6;
 }
 
 /* Form title */
 .login-form-title {
-    font-size: 2.25rem; /* larger heading */
+    font-size: 2.25rem;
     font-weight: 700;
     text-align: center;
     margin-bottom: 1rem;
@@ -71,7 +71,7 @@
 
 /* Standard link styling */
 .login-link {
-    color: #228be6; /* blue text */
+    color: #228be6;
     font-size: 0.9rem;
     text-decoration: none;
 }
@@ -81,30 +81,44 @@
     text-decoration: underline;
 }
 
-/* Logout link styling (red, smaller text, no background) */
+/* Logout link styling */
 .logout-link {
-    color: #dc2626; /* red text */
-    font-size: 0.9rem; /* smaller font */
+    color: #dc2626;
+    font-size: 0.9rem;
     font-weight: 500;
-    text-decoration: none; /* remove underline */
+    text-decoration: none;
     cursor: pointer;
 }
 
 /* Hover effect for logout link */
 .logout-link:hover {
-    text-decoration: underline; /* underline on hover for feedback */
-}
-
-/* Utility classes for margin spacing */
-.mb-3 {
-    margin-bottom: 1rem;
-}
-
-.mb-4 {
-    margin-bottom: 1.25rem;
+    text-decoration: underline;
 }
 
 /* Utility class for center alignment */
 .text-center {
     text-align: center;
+}
+
+/* Changes and Dlete button on the same row */
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.button-row .login-btn-primary {
+    flex: 1;
+}
+
+.button-row .logout-link {
+    flex: 1;
+    text-align: right;
+}
+
+/* Log out button under */
+.text-center.mb-3 a.logout-link {
+    display: block;
+    margin-top: 10px;
 }
